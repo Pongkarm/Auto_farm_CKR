@@ -1,0 +1,14 @@
+{
+  "adb_path": "C:\\LDPlayer\\LDPlayer9\\adb.exe",
+  "discord_webhook_url": "https://discord.com/api/webhooks/1524406579271827556/0fhUMCLsrg0A3PQTKJWihm7pe4ZX4cDBhfs_8pSHok0tZU5Of33rOUHhz5hBo5yoRUYR",
+  "use_discord_webhook": true,
+  "target_package": "com.devsisters.crg",
+  "target_activity": "com.devsisters.CookieRunForKakao.OvenbreakX",
+  "templates_dir": "templates",
+  "notfound_dir": "notfound",
+  "error_img_path": "unrecognized_state.png",
+  "use_fast_start": true,
+  "rounds_per_set": 999,
+  "anti_cheat_delay_min": 0.2,
+  "anti_cheat_delay_max": 1.0
+}
