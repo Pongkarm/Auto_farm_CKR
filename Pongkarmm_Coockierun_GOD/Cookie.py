@@ -552,12 +552,23 @@ def running_game(adb_path, templates_dir, notfound_dir, user_config, webhook_url
         if elapsed_time >= playtime:
             print(f"⏱️ เวลาการเล่นถึงที่กำหนดแล้ว ({elapsed_time:.1f}/{playtime} วินาที) -> กำลังเรียกฟังก์ชัน stopgame...")
             # 3. ฟังก์ชั่น stopgame ให้กดปุ่มไปที่พิกัดนึงก่อน mx, my = get_random_pos(242, 586, 471, 382)
-            mx, my = get_random_pos(999, 999, 999, 999)
+            mx, my = get_random_pos(1467, 66, 1512, 22)
             tap_button(adb_path, device_id, mx, my)
             # จากนั้น delay 1 + delay random 0.1-0.5 วิ
             delay_stop = 1.0 + random.uniform(0.1, 0.5)
-            print(f"⏳ [stopgame] กดพิกัดเริ่มต้นสำเร็จ -> หน่วงเวลา {delay_stop:.2f} วินาที")
             time.sleep(delay_stop)
+            
+            #ปุ่มสตอบ
+            mx, my = get_random_pos(630, 571, 932, 484)
+            tap_button(adb_path, device_id, mx, my)
+            delay_stop = 1.0 + random.uniform(0.1, 0.5)
+            time.sleep(delay_stop)
+            
+            mx, my = get_random_pos(640, 522, 948, 434)
+            tap_button(adb_path, device_id, mx, my)
+        
+            print(f"⏳ [stopgame] กดพิกัดเริ่มต้นสำเร็จ -> หน่วงเวลา {delay_stop:.2f} วินาที")
+            time.sleep(0.99 + delay_stop)
             
             # พอจบฟังก์ชั่นนี้อยากให้เข้า 4. เช็ค "หน้าจบเกม" (result.png)
             print("➡️ [stopgame] เสร็จสิ้น -> ข้ามไปตรวจเช็คหน้าจบเกม (result.png)")
