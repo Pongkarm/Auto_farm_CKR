@@ -10,5 +10,7 @@
   "use_fast_start": true,
   "rounds_per_set": 999,
   "anti_cheat_delay_min": 0.2,
-  "anti_cheat_delay_max": 1.0
+  "anti_cheat_delay_max": 1.0,
+  "autojump": true,
+  "playtime": 999
 }

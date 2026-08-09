@@ -544,6 +544,28 @@ def running_game(adb_path, templates_dir, notfound_dir, user_config, webhook_url
                 time.sleep(1.5)
                 continue
 
+        # ตรวจสอบเวลาเล่นสะสมเพื่อหยุดเกมเมื่อถึงเวลา playtime
+        autojump = user_config.get("autojump", True)
+        playtime = user_config.get("playtime", 180)
+        elapsed_time = time.time() - start_time
+        
+        if elapsed_time >= playtime:
+            print(f"⏱️ เวลาการเล่นถึงที่กำหนดแล้ว ({elapsed_time:.1f}/{playtime} วินาที) -> กำลังเรียกฟังก์ชัน stopgame...")
+            # 3. ฟังก์ชั่น stopgame ให้กดปุ่มไปที่พิกัดนึงก่อน mx, my = get_random_pos(242, 586, 471, 382)
+            mx, my = get_random_pos(999, 999, 999, 999)
+            tap_button(adb_path, device_id, mx, my)
+            # จากนั้น delay 1 + delay random 0.1-0.5 วิ
+            delay_stop = 1.0 + random.uniform(0.1, 0.5)
+            print(f"⏳ [stopgame] กดพิกัดเริ่มต้นสำเร็จ -> หน่วงเวลา {delay_stop:.2f} วินาที")
+            time.sleep(delay_stop)
+            
+            # พอจบฟังก์ชั่นนี้อยากให้เข้า 4. เช็ค "หน้าจบเกม" (result.png)
+            print("➡️ [stopgame] เสร็จสิ้น -> ข้ามไปตรวจเช็คหน้าจบเกม (result.png)")
+            # โดยเราจะยังไม่ออกจากลูป แต่ในรอบถัดๆ ไป (หรือทันที) จะบังคับสแกนหน้าจบเกม
+            # เพื่อความปลอดภัยและให้เข้าเงื่อนไขสแกนหน้าจบเกมทันที เราสามารถแคปภาพใหม่แล้วเช็คหน้าจบเกมได้เลย
+            current_screen = capture_screen(adb_path)
+
+
         # 4. เช็ค "หน้าจบเกม" (result.png)
         if result_template is not None:
             result_crop = crop_screen_area(current_screen, (526, 515, 1055, 53))
@@ -606,7 +628,7 @@ def running_game(adb_path, templates_dir, notfound_dir, user_config, webhook_url
                 return total_runs, total_gold_accumulated
 
         # 5. เช็ค "หน้าต่าง munmot" (munmot.png) เฉพาะฟามมันบดเท่านั้นถ้าไม่ามให้ปิดด้วยข้อ 5.
-        if munmot_template is not None and munmot_count < 7:
+        if autojump and munmot_template is not None and munmot_count < 7:
             munmot_crop = crop_screen_area(current_screen, (353, 512, 431, 495))
 
             if munmot_crop.shape[0] >= munmot_template.shape[0] and munmot_crop.shape[1] >= munmot_template.shape[1]:
@@ -622,14 +644,14 @@ def running_game(adb_path, templates_dir, notfound_dir, user_config, webhook_url
                 max_jump = random.randint(12,15)
                 # วนกดปุ่ม 16 ครั้ง ห่างกันครั้งละ 0.49 วินาที
                 for i in range(1, max_jump):
-                    mx, my = get_random_pos(242, 586, 471, 382)
-                    tap_button(adb_path, device_id, mx, my)
-                    delay_time = random.uniform(0.4, 0.67)
+                     mx, my = get_random_pos(242, 586, 471, 382)
+                     tap_button(adb_path, device_id, mx, my)
+                     delay_time = random.uniform(0.4, 0.67)
 
-                    print(f"   └─ [{i}/{max_jump}] กดปุ่ม munmot ที่พิกัด ({mx}, {my}) (หน่วง {delay_time:.2f}s)")
-                    time.sleep(delay_time)
-                    mx, my = get_random_pos(1234, 359, 1349, 293)
-                    tap_button(adb_path, device_id, mx, my)
+                     print(f"   └─ [{i}/{max_jump}] กดปุ่ม munmot ที่พิกัด ({mx}, {my}) (หน่วง {delay_time:.2f}s)")
+                     time.sleep(delay_time)
+                     mx, my = get_random_pos(1234, 359, 1349, 293)
+                     tap_button(adb_path, device_id, mx, my)
                 
                 time.sleep(1.0)
                 continue
@@ -684,6 +706,9 @@ if __name__ == "__main__":
                     print('กลับไปหน้าหลัก')
                     continue
                 
+                user_setup_boost["autojump"] = config.get("autojump", True)
+                user_setup_boost["playtime"] = config.get("playtime", 180)
+
                 start2_process(adb_path=adb_path, device_id=device_id, user_config=user_setup_boost)
                 total_runs, total_gold_accumulated = running_game(
                     adb_path=adb_path,
