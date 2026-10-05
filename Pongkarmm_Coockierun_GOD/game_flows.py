@@ -49,7 +49,7 @@ def check_loby_state(screen_img, templates_dir):
     res_full = cv2.matchTemplate(screen_img, template, cv2.TM_CCOEFF_NORMED)
     _, max_val_full, _, _ = cv2.minMaxLoc(res_full)
 
-    if max_val_full >= 0.95:
+    if max_val_full >= 0.90:
         print(f"✅ [Full Search] เจอหน้า Loby บนหน้าจอ! (ความเหมือน: {max_val_full*100:.1f}%)")
         return True
     
