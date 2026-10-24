@@ -7,7 +7,7 @@
   "templates_dir": "templates",
   "notfound_dir": "notfound",
   "error_img_path": "unrecognized_state.png",
-  "rounds_per_set": 999,
+  "rounds_per_set": 9999,
   "anti_cheat_delay_min": 0.2,
   "anti_cheat_delay_max": 1.0,
   "autojump": false,

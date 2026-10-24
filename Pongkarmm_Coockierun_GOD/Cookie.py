@@ -1,11 +1,19 @@
 import sys
+import os
+
+# ปรับ Working Directory ให้ชี้ไปที่โฟลเดอร์ของตัวโปรแกรมเสมอ
+# (ป้องกัน Error หา Config.json หรือ templates ไม่เจอ เวลาดับเบิ้ลคลิก .exe หรือ Shortcut)
+if getattr(sys, 'frozen', False):
+    os.chdir(os.path.dirname(sys.executable))
+else:
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 if hasattr(sys.stderr, 'reconfigure'):
     sys.stderr.reconfigure(encoding='utf-8')
 
 import json
-import os
 import random
 import time
 import signal
